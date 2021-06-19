@@ -19,7 +19,7 @@ Technology is prohibited.
 
 #include "Engine/Core/Base.h"
 #include "Engine/Core/Timestep.h"
-#include "Engine/Events/Event.h"
+#include "Engine/Core/Events/Event.h"
 
 namespace engine
 {
@@ -45,7 +45,7 @@ namespace engine
         const std::string& GetName() const { return m_debugName; }
 
         /*-----------------------------------------------------------------------------*/
-        /* Functions                                                                   */
+        /* Abstract Functions                                                          */
         /*-----------------------------------------------------------------------------*/
         virtual void OnAttach() {}
         virtual void OnDetach() {}

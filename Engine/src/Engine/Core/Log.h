@@ -21,6 +21,9 @@ Technology is prohibited.
 #include <spdlog/fmt/ostr.h>
 #pragma warning(pop)
 
+#include <ostream>
+#include <iostream>
+
 namespace engine
 {
     /********************************************************************************//*!
@@ -33,6 +36,11 @@ namespace engine
          @brief     Initialization of logging library. Performed in main
         *//*********************************************************************************/
         static void Init();
+
+        /********************************************************************************//*!
+         @brief     Retrieve the ostream output that is stored for logging.
+        *//*********************************************************************************/
+        static std::ostringstream& GetOstreamOutput();
 
         /********************************************************************************//*!
          @brief     Retrieve the core logger used to store logging information of
@@ -48,12 +56,13 @@ namespace engine
 
     protected:
         // do not create an instance of this class
-        Log()   = default;
-        ~Log()  = default;
+        Log()   = delete;
+        ~Log()  = delete;
 
     private:
         static std::shared_ptr<spdlog::logger> s_coreLogger;
         static std::shared_ptr<spdlog::logger> s_clientLogger;
+        static std::ostringstream oss;
     };
 
 }
@@ -77,6 +86,7 @@ namespace engine
     #define LOG_ERROR(...)              ::engine::Log::GetClientLogger()->error(__VA_ARGS__)
     #define LOG_CRITICAL(...)           ::engine::Log::GetClientLogger()->critical(__VA_ARGS__)
 
+    //#define LOG_OUTPUT_STREAM(oss)      ::engine::Log::SetOutputStream(oss);
 #else
     #define LOG_ENGINE_TRACE(...)
     #define LOG_ENGINE_INFO(...) 

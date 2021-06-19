@@ -31,7 +31,7 @@ namespace engine
 #ifdef ENGINE_PLATFORM_WINDOWS
         , m_window { static_cast<SDL_Window*>(Application::Get().GetWindow().GetNativeWindow())  }
 #endif
-        , m_renderer{ static_cast<GraphicsContext*>(Application::Get().GetWindow().GetNativeRenderer()) }
+        , m_renderer{ static_cast<GraphicsContext*>(Application::Get().GetWindow().GetRenderingContext()) }
     {
     }
 
@@ -78,21 +78,6 @@ namespace engine
         m_renderer->OnImGuiShutdown();
         ImGui_ImplSDL2_Shutdown();
         ImGui::DestroyContext();
-    }
-
-    void ImGuiLayer::OnEvent(Event& e)
-    {
-        if (m_blockEvents)
-        {
-            ImGuiIO& io = ImGui::GetIO();
-            e.Handled |= e.IsInCategory(EVENT_CATEGORY::MOUSE) & io.WantCaptureMouse;
-            e.Handled |= e.IsInCategory(EVENT_CATEGORY::KEYBOARD) & io.WantCaptureKeyboard;
-
-            if (e.GetEventType() == engine::EVENT_TYPE::MOUSESCROLLED)
-            {
-                io.MouseWheel = static_cast<engine::MouseScrolledEvent&>(e).GetY();
-            }
-        }
     }
 
     void ImGuiLayer::Begin()

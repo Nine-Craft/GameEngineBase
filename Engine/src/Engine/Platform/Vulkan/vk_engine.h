@@ -7,8 +7,8 @@
 #pragma warning(push)
 #pragma warning( disable : 26812 )
 
-#include "Platform/Vulkan/vk_types.h"
-#include "Platform/Vulkan/vk_mesh.h"
+#include "Engine/Platform/Vulkan/vk_types.h"
+#include "Engine/Platform/Vulkan/vk_mesh.h"
 
 #include <vector>
 #include <deque>
@@ -158,8 +158,13 @@ public:
 	void SetWindow(SDL_Window *window) {
 		_window={ window };
 		int w, h;
-		SDL_GetWindowSize(window,&w,&h);
+		SDL_GetWindowSize(_window,&w,&h);
 		_windowExtent.width = w; _windowExtent.height = h;
+	}
+
+	void SetWindowResized()
+	{
+		_windowResized = true;
 	}
 
 	UploadContext _uploadContext;
@@ -224,6 +229,8 @@ public:
 	VkExtent2D _windowExtent{ 1024 , 720 };
 
 	struct SDL_Window* _window{ nullptr };
+	bool _windowResized{ false };
+	bool _recreateSwapchain{ false };
 
 	int _selectShader{ 0 };
 
@@ -260,7 +267,7 @@ private:
 
 	void init_vulkan();
 
-	void init_swapchain();
+	void init_swapchain(VkSwapchainKHR oldSwapchain = nullptr);
 
 	void init_commands();
 
@@ -279,6 +286,13 @@ private:
 	void upload_mesh(Mesh& mesh);
 
 	void init_scene();
+
+	void get_window_extent()
+	{
+		int w, h;
+		SDL_GetWindowSize(_window, &w, &h);
+		_windowExtent.width = w; _windowExtent.height = h;
+	}
 
 	//loads a shader module from a spir-v file. Returns false if it errors
 	bool load_shader_module(const char *filePath, VkShaderModule *outShaderModule);

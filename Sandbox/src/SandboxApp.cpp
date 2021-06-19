@@ -18,9 +18,6 @@ Technology is prohibited.
 
 #include <iostream>
 
-//#include <SDL.h>
-//#include <imgui.h>
-
 #include "Editor/Editor.h"
 
 class EditorLayer : public engine::Layer
@@ -56,6 +53,12 @@ public :
     void OnUpdate(engine::Timestep dt) override
     {
         //LOG_INFO("ExampleLayer::Update {0}s {1}ms", dt.GetSeconds(), dt.GetMilliSeconds());
+
+        // New way to do check keys.
+        if (engine::Input::IsKeyPressed(ENGINE_KEY_0))
+        {
+            LOG_TRACE("key 0 Pressed ");
+        }
 
         if (engine::Input::IsAnyKeyDown())
         {
@@ -209,6 +212,5 @@ public:
 
 engine::Application* engine::CreateApplication(engine::CommandLineArgs args)
 {
-    
     return OONEW Sandbox{ args };
 }
