@@ -5,14 +5,12 @@
 
 namespace engine
 {
-    template<typename T, std::size_t MAX_SIZE, typename Allocator = std::allocator<T>>
+    template<typename T, std::size_t MAX_SIZE, typename DenseAllocator = std::allocator<T>, 
+        typename SparseAllocator = std::allocator<std::size_t>>
     class SparseContainer
     {
 
 
-        //----------------------------------
-        // Types
-        // ----------------------------------
     private:
         /*using alloc_type = typename std::allocator_traits<Allocator>::template rebind_alloc<T>;
         using alloc_traits = std::allocator_traits<alloc_type>;
@@ -23,22 +21,22 @@ namespace engine
         using bucket_alloc_traits = std::allocator_traits<bucket_alloc_type>;
         using bucket_alloc_pointer = typename bucket_alloc_traits::pointer;*/
 
-        class Iterator final
+        /*class Iterator final
         {
 
         };
         class Const_Iterator final
         {
 
-        };
+        };*/
 
     public:
         using value_type = T;
-        using dense_container = std::vector<value_type, Allocator>;
+        using dense_container = std::vector<value_type, DenseAllocator>;
         using size_type = std::size_t;
-        using sparse_container = std::vector<size_type, Allocator>;
+        using sparse_container = std::vector<size_type, SparseAllocator>;
         using index_container = std::array<size_type, MAX_SIZE>;
-        using iterator = Iterator;
+        using iterator = typename dense_container::iterator;
 
         static constexpr size_type MAX_ID = std::numeric_limits<size_type>::max();
     private:
@@ -49,7 +47,6 @@ namespace engine
         // the container of index to the elements
         index_container m_index;
 
-        Allocator allocator;
         /*alloc_type allocator;
         bucket_alloc_type bucket_allocator;
         bucket_alloc_pointer sparse;
@@ -79,7 +76,7 @@ namespace engine
         bool IsAvailable(size_type const index) const
         {
             //if unused index return true
-            if (IsValid(index) && m_sparse[index] >= m_dense.size())
+            if (IsValid(index) && m_index[index] >= m_dense.size())
                 return true;
             //if the dense element located by this index does not belong to
             //this index return true, else return false
@@ -90,6 +87,8 @@ namespace engine
 
         T* At(size_type const index)
         {
+            if (IsAvailable(index) == true)
+                return nullptr;
             return &(m_dense[m_index[index]]);
         }
 
@@ -143,6 +142,9 @@ namespace engine
 
             m_index[last_index] = index_to_remove;
 
+
+            m_dense.pop_back();
+            m_sparse.pop_back();
             return true;
         }
 
@@ -152,6 +154,9 @@ namespace engine
             m_sparse.clear();
             std::fill(m_index.begin(), m_index.end(), MAX_ID);
         }
+
+        iterator begin() { return m_dense.begin(); }
+        iterator end() { return m_dense.end(); }
 
     private:
 
