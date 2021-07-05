@@ -19,63 +19,68 @@ Technology is prohibited.
 #include <unordered_map>
 #include "ECS_Utility.h"
 #include "System.h"
-class SystemManager
+
+namespace engine
 {
-public:
-	template<typename T, typename... Args>
-	std::shared_ptr<T> RegisterSystem(Args&&... arguementList)
+
+	class SystemManager
 	{
-		const char* typeName = typeid(T).name();
-
-		//Registering system more than once
-		ENGINE_ASSERT(m_Systems.find(typeName) == m_Systems.end());
-
-		auto system = std::make_shared<T>(std::forward<Args>(arguementList)...);
-		m_Systems.insert({ typeName, system });
-		return system;
-	}
-
-	template<typename T>
-	void SetSignature(Signature signature)
-	{
-		const char* typeName = typeid(T).name();
-
-		assert(m_Systems.find(typeName) != m_Systems.end() && "System used before registered.");
-
-		m_Signatures.insert({ typeName, signature });
-	}
-
-	void EntityDestroyed(Entity entity)
-	{
-		/*for (auto const& pair : m_Systems)
+	public:
+		template<typename T, typename... Args>
+		std::shared_ptr<T> RegisterSystem(Args&&... arguementList)
 		{
-			auto const& system = pair.second;
+			const char* typeName = typeid(T).name();
 
+			//Registering system more than once
+			ENGINE_ASSERT(m_Systems.find(typeName) == m_Systems.end());
 
-			system->m_Entities.erase(entity);
-		}*/
-	}
+			auto system = std::make_shared<T>(std::forward<Args>(arguementList)...);
+			m_Systems.insert({ typeName, system });
+			return system;
+		}
 
-	void EntitySignatureChanged(Entity entity, Signature entitySignature)
-	{
-		/*for (auto const& pair : m_Systems)
+		template<typename T>
+		void SetSignature(Signature signature)
 		{
-			auto const& type = pair.first;
-			auto const& system = pair.second;
-			auto const& systemSignature = m_Signatures[type];
+			const char* typeName = typeid(T).name();
 
-			if ((entitySignature & systemSignature) == systemSignature)
+			assert(m_Systems.find(typeName) != m_Systems.end() && "System used before registered.");
+
+			m_Signatures.insert({ typeName, signature });
+		}
+
+		void EntityDestroyed(Entity entity)
+		{
+			/*for (auto const& pair : m_Systems)
 			{
-				system->m_Entities.insert(entity);
-			}
-			else
-			{
+				auto const& system = pair.second;
+
+
 				system->m_Entities.erase(entity);
-			}
-		}*/
-	}
+			}*/
+		}
 
-private:
-	std::unordered_map<const char*, Signature> m_Signatures{};
-	std::unordered_map<const char*, std::shared_ptr<System>> m_Systems{};
-};
+		void EntitySignatureChanged(Entity entity, Signature entitySignature)
+		{
+			/*for (auto const& pair : m_Systems)
+			{
+				auto const& type = pair.first;
+				auto const& system = pair.second;
+				auto const& systemSignature = m_Signatures[type];
+
+				if ((entitySignature & systemSignature) == systemSignature)
+				{
+					system->m_Entities.insert(entity);
+				}
+				else
+				{
+					system->m_Entities.erase(entity);
+				}
+			}*/
+		}
+
+	private:
+		std::unordered_map<const char*, Signature> m_Signatures{};
+		std::unordered_map<const char*, std::shared_ptr<System>> m_Systems{};
+	};
+}

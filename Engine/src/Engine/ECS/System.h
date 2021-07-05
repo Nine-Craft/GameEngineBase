@@ -15,11 +15,14 @@ Technology is prohibited.
 #pragma once
 #include <set>
 #include "ECS_Utility.h"
-class System
+namespace engine
 {
-public:
-	//additional helper functions to be included when requested
-	virtual ~System() = default;
-private:
+	class System
+	{
+	public:
+		//additional helper functions to be included when requested
+		virtual ~System() = default;
+	private:
 
-};
+	};
+}
