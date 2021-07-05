@@ -3,8 +3,6 @@
 #include "ECS_Utility.h"
 #include "SparseArray.h"
 #include "Component.h"
-#include "ComponentArray.h"
-#include "ComponentManager.h"
 #include "ECS_Manager.h"
 
 namespace engine

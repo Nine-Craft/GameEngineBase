@@ -14,6 +14,7 @@ Technology is prohibited.
  *********************************************************************/
 #pragma once
 #include "ECS_Utility.h"
+#include "SparseArray.h"
 #include "Component.h"
 #include "Engine/Core/Assert.h"
 
