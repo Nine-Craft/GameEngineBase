@@ -21,15 +21,6 @@ namespace engine
         using bucket_alloc_traits = std::allocator_traits<bucket_alloc_type>;
         using bucket_alloc_pointer = typename bucket_alloc_traits::pointer;*/
 
-        /*class Iterator final
-        {
-
-        };
-        class Const_Iterator final
-        {
-
-        };*/
-
     public:
         using value_type = T;
         using dense_container = std::vector<value_type, DenseAllocator>;
