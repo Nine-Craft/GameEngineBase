@@ -36,10 +36,11 @@ namespace engine
 
 			auto system = std::make_shared<T>(std::forward<Args>(arguementList)...);
 			m_Systems.insert({ typeName, system });
+
 			return system;
 		}
 
-		template<typename T>
+		/*template<typename T>
 		void SetSignature(Signature signature)
 		{
 			const char* typeName = typeid(T).name();
@@ -47,7 +48,7 @@ namespace engine
 			assert(m_Systems.find(typeName) != m_Systems.end() && "System used before registered.");
 
 			m_Signatures.insert({ typeName, signature });
-		}
+		}*/
 
 		void EntityDestroyed(Entity entity)
 		{
@@ -80,7 +81,6 @@ namespace engine
 		}
 
 	private:
-		std::unordered_map<const char*, Signature> m_Signatures{};
-		std::unordered_map<const char*, std::shared_ptr<System>> m_Systems{};
+		std::unordered_map<const char*, std::shared_ptr<System>> m_Systems;
 	};
 }

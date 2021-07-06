@@ -133,8 +133,11 @@ namespace engine
 		template<typename T, typename... Args>
 		std::shared_ptr<T> RegisterSystem(Args&&... arguementList)
 		{
-			return m_SystemManager->RegisterSystem<T>(std::forward<Args>(arguementList)...);
+			auto system = m_SystemManager->RegisterSystem<T>(*this,std::forward<Args>(arguementList)...);
+			return system;
 		}
+
+
 
 		template<typename T>
 		void SetSystemSignature(Signature signature)
