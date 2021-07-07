@@ -23,6 +23,31 @@ Technology is prohibited.
 #include "Engine/Platform/Vulkan/VulkanContext.h"
 #include "Engine/Debug/cvars.h"
 
+#include "Engine/ECS/ECS_Test.h"
+#include "Engine/Transform/TransformSystem.h"
+
+class TransformTestLayer : public engine::Layer
+{
+private:
+    engine::ECS_Manager manager;
+    engine::TransformSystem tfSystem{ manager };
+
+public:
+    
+    TransformTestLayer() : Layer{ "TransformTestLayer" }
+    {
+        engine::ECS_Test();
+    }
+
+    virtual void OnUpdate(engine::Timestep dt) override
+    {
+    }
+
+    virtual void OnImGuiRender() override
+    {
+    }
+};
+
 class EditorLayer : public engine::Layer
 {
 private:
@@ -314,11 +339,14 @@ public:
         PushLayer(new ExampleLayer());
         PushOverlay(new EditorLayer());
         PushOverlay(new SceneCamera());
+        PushOverlay(new TransformTestLayer());
         // one actual layer - gameplay logic
         // one ui layer - game ui
         // one imgui layer - imgui stuff
             // one heirarchy layer - 
             // one inspector layer - 
+
+        
 
     };
 
