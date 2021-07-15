@@ -70,15 +70,31 @@ namespace engine
 		}
 
 		template<typename T, typename... args>
-		void EmplaceComponent(Entity entity, args&&... arguementList)
+		std::enable_if_t<std::is_base_of_v<Component, T> == true, T&>
+			EmplaceComponent(Entity entity, args&&... arguementList)
 		{
-			m_ComponentManager->EmplaceComponent<T>(entity, std::forward<args>(arguementList)...);
+			auto& comp = m_ComponentManager->EmplaceComponent<T>(entity, entity, std::forward<args>( arguementList)...);
 
 			auto signature = m_EntityManager->GetSignature(entity);
 			signature.set(m_ComponentManager->GetComponentID<T>(), true);
 			m_EntityManager->SetSignature(entity, signature);
 
 			//m_SystemManager->EntitySignatureChanged(entity, signature);
+			return comp;
+		}
+
+		template<typename T, typename... args>
+		std::enable_if_t<std::is_base_of_v<Component, T> == false, T&> 
+			EmplaceComponent(Entity entity, args&&... arguementList)
+		{
+			auto& comp = m_ComponentManager->EmplaceComponent<T>(entity, std::forward<args>(arguementList)...);
+
+			auto signature = m_EntityManager->GetSignature(entity);
+			signature.set(m_ComponentManager->GetComponentID<T>(), true);
+			m_EntityManager->SetSignature(entity, signature);
+
+			//m_SystemManager->EntitySignatureChanged(entity, signature);
+			return comp;
 		}
 
 		template<typename T>

@@ -37,7 +37,7 @@ namespace engine
         // setting it to false.
         for (auto it : view)
         {
-            auto transform = m_ECS_Manager.GetComponent<Transform3D>(it);
+            auto& transform = m_ECS_Manager.GetComponent<Transform3D>(it);
 
             if (transform.HasChanged())
             {

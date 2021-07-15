@@ -32,8 +32,10 @@ namespace engine
         /*-----------------------------------------------------------------------------*/
         /* Constructors and Destructors                                                */
         /*-----------------------------------------------------------------------------*/
-        Transform3D()                     = delete;
-        virtual ~Transform3D() override   = default;
+        Transform3D()                               = delete;
+        Transform3D(const Transform3D&)             = default;
+        Transform3D& operator=(const Transform3D&)  = default;
+        virtual ~Transform3D() override             = default;
 
         /****************************************************************************//*!
          @brief    Overloaded constructor for transform component

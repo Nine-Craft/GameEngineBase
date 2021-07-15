@@ -17,6 +17,7 @@ Technology is prohibited.
 #pragma once
 
 #include "ECS.h"
+#include "WorldManager.h"
 
 namespace engine
 {
@@ -47,130 +48,130 @@ namespace engine
         GameObject* FindGameObjectInChildrenByName(std::string const& name);
 
 
-        //template<typename Component>
-        //Component& GetComponent();
+        template<typename Component>
+        Component& GetComponent();
 
-        //template<typename Component>
-        //Component* TryGetComponent();
+        template<typename Component>
+        Component* TryGetComponent();
 
-        //template<typename Component>
-        //bool HasComponent() const;
-
-
-        //template<typename Component, typename... Args>
-        //Component& AddComponent(Args... args);
-
-        //template<typename Component>
-        //Component& AddComponent(Component component);
-
-        //template <typename Component>
-        //Component* AddComponent(GameObject const& src);
+        template<typename Component>
+        bool HasComponent() const;
 
 
-        //template<typename Component>
-        //void RemoveComponent();
+        template<typename Component, typename... Args>
+        Component& AddComponent(Args... args);
 
-        //template<typename Component>
-        //bool CopyComponent(GameObject const& src);
-        //
-        //template<typename Component>
-        //bool TransferComponent(GameObject const& src);
+        template<typename Component>
+        Component& AddComponent(Component component);
 
-        ///*template<typename Component>
-        //bool AttemptRemoveComponent();
+        template <typename Component>
+        Component* AddComponent(GameObject const& src);
 
-        //template<typename Component>
-        //Component& AssertComponent();*/
 
-        //template<typename Component, typename... Args>
-        //Component& EnsureComponent(Args... args);
+        template<typename Component>
+        void RemoveComponent();
+
+        template<typename Component>
+        bool CopyComponent(GameObject const& src);
+        
+        template<typename Component>
+        bool TransferComponent(GameObject const& src);
+
+        /*template<typename Component>
+        bool AttemptRemoveComponent();
+
+        template<typename Component>
+        Component& AssertComponent();*/
+
+        template<typename Component, typename... Args>
+        Component& EnsureComponent(Args... args);
 
     };
 
     /*---------------------------------------------------------------------------------*/
     /* Template Implementation                                                         */
     /*---------------------------------------------------------------------------------*/
-    /*template<typename Component>
+    template<typename Component>
     Component& GameObject::GetComponent()
     {
-        return ECS_Manager::GetComponent<Component>(m_entity);
-    }*/
+        return WorldManager::GetActiveWorld().GetComponent<Component>(m_entity);
+    }
     
-    //template<typename Component>
-    //Component* GameObject::TryGetComponent()
-    //{
-    //    return ECS_Manager::TryGetComponent<Component>(m_entity);
-    //}
+    template<typename Component>
+    Component* GameObject::TryGetComponent()
+    {
+        return WorldManager::GetActiveWorld().TryGetComponent<Component>(m_entity);
+    }
 
-    //template<typename Component>
-    //bool GameObject::HasComponent() const
-    //{
-    //    return ECS_Manager::HasComponent<Component>(m_entity);
-    //}
+    template<typename Component>
+    bool GameObject::HasComponent() const
+    {
+        return WorldManager::GetActiveWorld().HasComponent<Component>(m_entity);
+    }
 
-    //template<typename Component, typename...Args>
-    //Component& GameObject::AddComponent(Args...args)
-    //{
-    //    return ECS_Manager::EmplaceComponent<Component>(m_entity, args...);
-    //}
+    template<typename Component, typename...Args>
+    Component& GameObject::AddComponent(Args...args)
+    {
+        return WorldManager::GetActiveWorld().EmplaceComponent<Component>(m_entity, args...);
+    }
 
-    //template<typename Component>
-    //Component& GameObject::AddComponent(Component component)
-    //{
-    //    return ECS_Manager::AddComponent<Component>(m_entity);
-    //}
+    template<typename Component>
+    Component& GameObject::AddComponent(Component component)
+    {
+        return WorldManager::GetActiveWorld().AddComponent<Component>(m_entity);
+    }
 
-    //template <typename Component>
-    //Component* GameObject::AddComponent(GameObject const& src)
-    //{
-    //    CopyComponent<Component>(src)
-    //    return TryGetComponent<Component>(m_entity);
-    //}
+    template <typename Component>
+    Component* GameObject::AddComponent(GameObject const& src)
+    {
+        CopyComponent<Component>(src)
+        return TryGetComponent<Component>(m_entity);
+    }
 
-    //template<typename Component>
-    //void GameObject::RemoveComponent()
-    //{
-    //    ECS_Manager::RemoveComponent<Component>(entity.uniqueID);
-    //}
-    //
-    //template<typename Component>
-    //bool GameObject::CopyComponent(GameObject const& src)
-    //{
-    //    return ECS_Manager::CopyComponent<Component>(src.m_entity, m_entity);
-    //}
+    template<typename Component>
+    void GameObject::RemoveComponent()
+    {
+        WorldManager::GetActiveWorld().RemoveComponent<Component>(entity.uniqueID);
+    }
+    
+    template<typename Component>
+    bool GameObject::CopyComponent(GameObject const& src)
+    {
+        return WorldManager::GetActiveWorld().CopyComponent<Component>(src.m_entity, m_entity);
+    }
 
-    //template<typename Component>
-    //bool GameObject::TransferComponent(GameObject const& src)
-    //{
-    //    return ECS_Manager::TransferComponent<Component>(src.m_active, m_entity);
-    //}
+    template<typename Component>
+    bool GameObject::TransferComponent(GameObject const& src)
+    {
+        return WorldManager::GetActiveWorld().TransferComponent<Component>(src.m_active, m_entity);
+    }
 
-    ///*template<typename Component>
-    //bool GameObject::AttemptRemoveComponent()
-    //{
-    //    return ECS_Manager::AttemptRemoveComponent<Component>(entity.uniqueID);
-    //}
+    /*template<typename Component>
+    bool GameObject::AttemptRemoveComponent()
+    {
+        return ECS_Manager::AttemptRemoveComponent<Component>(entity.uniqueID);
+    }
 
-    //template<typename Component>
-    //Component& GameObject::AssertComponent()
-    //{
-    //    Component* c = GetComponent<Component>();
-    //    if (c == nullptr)
-    //    {
-    //        std::ostringstream oss;
-    //        oss << "GameObject does not contain a ";
-    //        oss << typeid(Component).name();
-    //        oss << " Component!";
-    //        throw MissingComponentException(oss.str());
-    //    }
-    //    return c;
-    //    ECS_Manager::TryGetComponent
-    //}*/
+    template<typename Component>
+    Component& GameObject::AssertComponent()
+    {
+        Component* c = GetComponent<Component>();
+        if (c == nullptr)
+        {
+            std::ostringstream oss;
+            oss << "GameObject does not contain a ";
+            oss << typeid(Component).name();
+            oss << " Component!";
+            throw MissingComponentException(oss.str());
+        }
+        return c;
+        ECS_Manager::TryGetComponent
+    }*/
 
-    //template<typename Component, typename...Args>
-    //Component& GameObject::EnsureComponent(Args...args)
-    //{
-    //    return HasComponent<Component>() ? GetComponent<Component>() : AddComponent<Component>(args...);
-    //}
+    template<typename Component, typename...Args>
+    Component& GameObject::EnsureComponent(Args...args)
+    {
+        return HasComponent<Component>() ? GetComponent<Component>() : AddComponent<Component>(args...);
+    }
 
 }

@@ -26,6 +26,8 @@ Technology is prohibited.
 #include "Engine/ECS/ECS_Test.h"
 #include "Engine/Transform/TransformSystem.h"
 
+#include "Engine/ECS/GameObject.h"
+
 class TransformTestLayer : public engine::Layer
 {
 private:
@@ -36,7 +38,6 @@ public:
     
     TransformTestLayer() : Layer{ "TransformTestLayer" }
     {
-        engine::ECS_Test();
     }
 
     virtual void OnUpdate(engine::Timestep dt) override
@@ -333,19 +334,27 @@ public:
     EditorSceneLayer() : Layer{ "EditorSceneLayer" },
         world(engine::WorldManager::CreateWorld())
     {
-        world.RegisterSystem<engine::Test_Transform_System>();
+        auto& ts = world.RegisterSystem<engine::TransformSystem>();
+        ts->Init();
+
+        auto* root = new engine::GameObject();
+
         for (int i = 0; i < 100; ++i)
         {
-            auto ent = world.CreateEntity();
-            world.EmplaceComponent<engine::Test_Transform>(ent, engine::Test_Transform{ 1.f,2.f,3.f });
-            world.EmplaceComponent<engine::Test_Health>(ent, engine::Test_Health{20});
+            auto* ent = new engine::GameObject();
+            root->AddChild(ent);
+
+            //auto ent = world.CreateEntity();
+            //world.EmplaceComponent<engine::Test_Transform>(ent, engine::Test_Transform{ 1.f,2.f,3.f });
+            //world.EmplaceComponent<engine::Test_Health>(ent, engine::Test_Health{20});
         }
 
     }
 
     virtual void OnUpdate(engine::Timestep dt) override
     {
-        world.GetSystem<engine::Test_Transform_System>()->Run();
+        
+        world.GetSystem<engine::TransformSystem>()->Update();
     }
 
 };

@@ -157,13 +157,13 @@ namespace utility
     };
 
     template<typename ID>
-    static UIID_Generator<ID>::value_type UIID_Generator<ID>::GetVersion(UIID_Generator<ID>::const_value _ID)
+    static typename UIID_Generator<ID>::value_type UIID_Generator<ID>::GetVersion(UIID_Generator<ID>::const_value _ID)
     {
         return _ID >> indexBits;
     }
 
     template<typename ID>
-    static UIID_Generator<ID>::value_type UIID_Generator<ID>::GetIndex(UIID_Generator<ID>::const_value _ID)
+    static typename UIID_Generator<ID>::value_type UIID_Generator<ID>::GetIndex(UIID_Generator<ID>::const_value _ID)
     {
         return _ID & indexBitmask;
     }
@@ -238,7 +238,7 @@ namespace utility
     // ========ID========
 
     template<typename ID>
-    static UIID_Generator<ID>::value_type UIID_Generator<ID>::createID( UIID_Generator<ID>::const_value _version, UIID_Generator<ID>::const_value _index)
+    static typename UIID_Generator<ID>::value_type UIID_Generator<ID>::createID( UIID_Generator<ID>::const_value _version, UIID_Generator<ID>::const_value _index)
     {
         return (_version << indexBits) | (_index & indexBitmask);
     }

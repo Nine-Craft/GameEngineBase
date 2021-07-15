@@ -44,7 +44,7 @@ namespace engine
 			//Too many entities in existence
 			ENGINE_ASSERT(m_LivingEntityCount < MAX_ENTITY);
 
-			Entity id = idGen.GenerateID();
+			//Entity id = idGen.GenerateID();
 
 			Entity id = m_AvailableEntities.front();
 			m_AvailableEntities.pop();
@@ -59,7 +59,7 @@ namespace engine
 			//Entity out of range
 			ENGINE_ASSERT(entity < MAX_ENTITY);
 
-			idGen.DiscardID(entity);
+			//idGen.DiscardID(entity);
 
 			m_Signatures[entity].reset();
 			m_AvailableEntities.push(entity);

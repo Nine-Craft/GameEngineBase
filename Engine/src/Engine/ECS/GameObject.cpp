@@ -22,12 +22,14 @@ namespace engine
     {
         //m_entity = ECS_Manager::GenerateUID();
         //m_entity = EntityManager::CreateEntity();
-        //AddComponent<Transform3D>();
+        m_entity = WorldManager::GetActiveWorld().CreateEntity();
+        auto& trans = AddComponent<Transform3D>();
+
     }
 
     GameObject::~GameObject()
     {
-        //EntityManager::DestroyEntity(m_entity);
+        WorldManager::GetActiveWorld().DestroyEntity(m_entity);
     }
 
     void GameObject::AddChild(GameObject* gameObj, bool preserveTransforms)
