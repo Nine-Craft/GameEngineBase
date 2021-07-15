@@ -4,7 +4,10 @@
 \author         Chua Teck Lee, c.tecklee, 390008420
 \par            email: c.tecklee\@digipen.edu
 \date           Jul 07, 2021
-\brief          Describes a gameobject which is the interface for everything ECS related
+\brief          Describes a gameobject which is the basic unit and building block for 
+                every scene. This object provides the ability to tap on existing ECS
+                systems and the ability to have scenegraph.
+                
 
 Copyright (C) 2021 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
@@ -87,12 +90,12 @@ namespace engine
     /*---------------------------------------------------------------------------------*/
     /* Template Implementation                                                         */
     /*---------------------------------------------------------------------------------*/
-    //template<typename Component>
-    //Component& GameObject::GetComponent()
-    //{
-    //    return ECS_Manager::GetComponent<Component>(m_entity);
-    //}
-    //
+    /*template<typename Component>
+    Component& GameObject::GetComponent()
+    {
+        return ECS_Manager::GetComponent<Component>(m_entity);
+    }*/
+    
     //template<typename Component>
     //Component* GameObject::TryGetComponent()
     //{
