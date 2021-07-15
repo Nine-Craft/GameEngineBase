@@ -57,15 +57,16 @@ namespace engine
 		}
 
 		template<typename T>
-		void AddComponent(Entity entity, T component)
+		T& AddComponent(Entity entity, T component)
 		{
-			m_ComponentManager->AddComponent<T>(entity, component);
+			auto comp = m_ComponentManager->AddComponent<T>(entity, component);
 
 			auto signature = m_EntityManager->GetSignature(entity);
 			signature.set(m_ComponentManager->GetComponentID<T>(), true);
 			m_EntityManager->SetSignature(entity, signature);
 
 			//m_SystemManager->EntitySignatureChanged(entity, signature);
+			return comp;
 		}
 
 		template<typename T, typename... args>
@@ -137,6 +138,12 @@ namespace engine
 		}
 
 		template<typename T>
+		T* GetSystem()
+		{
+			return m_SystemManager->GetSystem<T>();
+		}
+
+		template<typename T>
 		void SetSystemSignature(Signature signature)
 		{
 			m_SystemManager->SetSignature<T>(signature);
@@ -164,7 +171,7 @@ namespace engine
 		//	mEventManager->SendEvent(eventId);
 		//}
 
-	private:
+	protected:
 		std::unique_ptr<ComponentManager> m_ComponentManager;
 		std::unique_ptr<EntityManager> m_EntityManager;
 		//std::unique_ptr<EventManager> mEventManager;

@@ -52,12 +52,32 @@ namespace engine
 			return m_ComponentTypes[typeName];
 		}
 
-		template<typename T>
+		/*template<typename T>
 		T& AddComponent(Entity entity, T component)
 		{
 			if (IsRegistered<T>() == false)
 				RegisterComponent<T>();
-			return GetComponentArray<T>()->InsertData(entity, component);
+			return *GetComponentArray<T>()->InsertData(entity, component);
+		}*/
+
+		template<typename T>
+		std::enable_if_t<std::is_base_of<Component,T>::value,T&> AddComponent(Entity entity, T component)
+		{
+			if (IsRegistered<T>() == false)
+				RegisterComponent<T>();
+			auto comp = GetComponentArray<T>()->InsertData(entity, component);
+			Component* base = static_cast<Component*>(&*comp);
+			base->SetEntity(entity);
+			return *comp;
+		}
+
+		template<typename T>
+		std::enable_if_t<std::is_base_of<Component, T>::value == false, T&> AddComponent(Entity entity, T component)
+		{
+			if (IsRegistered<T>() == false)
+				RegisterComponent<T>();
+			auto comp = GetComponentArray<T>()->InsertData(entity, component);
+			return *comp;
 		}
 
 		template<typename T, typename... args>
@@ -124,6 +144,17 @@ namespace engine
 			}
 		}
 
+		template<typename T>
+		Entity GetEntity(T& component)
+		{
+			return static_cast<Component>(component).GetEntity();
+		}
+
+		template<typename T>
+		Entity GetEntity(T* component)
+		{
+			return static_cast<Component>(component).GetEntity();
+		}
 	private:
 		TypeContainer m_ComponentTypes{};
 		ComponentContainer m_ComponentArrays{};
