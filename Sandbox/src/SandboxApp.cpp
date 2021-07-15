@@ -15,7 +15,7 @@ Technology is prohibited.
 
 // single-include file to get all the relevant functions from our engine.
 #include "Engine.h" 
-
+#include "Engine/ECS/ECS_Test.h"
 #include <iostream>
 
 #include "Editor/Editor.h"
@@ -180,6 +180,7 @@ class ExampleLayer : public engine::Layer
 public :
     ExampleLayer(): Layer("Example")
     {
+        //engine::ECS_Test();
     }
 
     void OnUpdate(engine::Timestep dt) override
@@ -323,6 +324,32 @@ public :
     }
 };
 
+class EditorSceneLayer : public engine::Layer
+{
+private:
+    engine::World& world;
+public:
+
+    EditorSceneLayer() : Layer{ "EditorSceneLayer" },
+        world(engine::WorldManager::CreateWorld())
+    {
+        world.RegisterSystem<engine::Test_Transform_System>();
+        for (int i = 0; i < 100; ++i)
+        {
+            auto ent = world.CreateEntity();
+            world.EmplaceComponent<engine::Test_Transform>(ent, engine::Test_Transform{ 1.f,2.f,3.f });
+            world.EmplaceComponent<engine::Test_Health>(ent, engine::Test_Health{20});
+        }
+
+    }
+
+    virtual void OnUpdate(engine::Timestep dt) override
+    {
+        world.GetSystem<engine::Test_Transform_System>()->Run();
+    }
+
+};
+
 class Sandbox : public engine::Application
 {
 public:
@@ -337,6 +364,7 @@ public:
         
         //debug layer
         PushLayer(new ExampleLayer());
+        PushLayer(new EditorSceneLayer());
         PushOverlay(new EditorLayer());
         PushOverlay(new SceneCamera());
         PushOverlay(new TransformTestLayer());
