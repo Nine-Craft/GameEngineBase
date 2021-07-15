@@ -136,7 +136,6 @@ namespace utility
         // number of bytes to hold the version (maximum number of versions)
         static constexpr size_t versionBytes        = idBytes - indexBytes;
 
-        
 
         static constexpr size_t bytesToBits         = 8;
         
@@ -176,6 +175,11 @@ namespace utility
         return isValidID(index, _ID);
     }
 
+    // index
+    // 0 1 2 3 4 5 6 7 8 9 
+    // 1 4 5 8 0
+    // 0 8 5 4 1
+
     template<typename ID>
     typename UIID_Generator<ID>::value_type UIID_Generator<ID>::GenerateID()
     {
@@ -191,12 +195,12 @@ namespace utility
         }
 
         // We need the index and version of the ID we are recycling.
-        value_type index = nextIndex;
-        value_type version = GetVersion(uniqueIDArray[index]);
+        value_type index = nextIndex;                           //0
+        value_type version = GetVersion(uniqueIDArray[index]);  //0
 
         // nextIndex will point to the index that the discarded ID 
         // was previously pointing to.
-        nextIndex = GetIndex(uniqueIDArray[nextIndex]);
+        nextIndex = GetIndex(uniqueIDArray[nextIndex]);         //0
         // Decrease recycleCounter.
         --recycleCounter;
 
@@ -210,11 +214,15 @@ namespace utility
     void UIID_Generator<ID>::DiscardID(UIID_Generator<ID>::const_value _ID)
     {
         // Find out the index and version of the handle we are discard.
-        value_type index = GetIndex(_ID);
-        value_type version = GetVersion(_ID);
+        value_type index = GetIndex(_ID);           //0
+        value_type version = GetVersion(_ID);       //0
 
         if (isValidID(index, _ID))
         {
+            //first array element = 0000 0000
+            //nextIndex -> 0
+            
+
             // Use the index portion of this discarded ID to point to the index of the previous discarded ID.
             uniqueIDArray[index] = createID(version, nextIndex);
             // nextIndex now points the index of this discarded ID.
@@ -223,6 +231,11 @@ namespace utility
             ++recycleCounter;
         }
     }
+    
+
+    // 0 0 0 0 | 0 0 0 0  
+    // version    index
+    // ========ID========
 
     template<typename ID>
     static UIID_Generator<ID>::value_type UIID_Generator<ID>::createID( UIID_Generator<ID>::const_value _version, UIID_Generator<ID>::const_value _index)
