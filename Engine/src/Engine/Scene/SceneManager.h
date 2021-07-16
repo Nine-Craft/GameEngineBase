@@ -58,8 +58,19 @@ namespace engine
 		{
 			ENGINE_ASSERT(GetInstance().m_scenes.empty());
 			ENGINE_ASSERT(GetInstance().active_scene != GetInstance().m_scenes.end());
-			*GetInstance().active_scene;
+			return *GetInstance().active_scene;
 
+		}
+
+		static World& GetActiveWorld()
+		{
+			return GetActiveScene().GetWorld();
+
+		}
+
+		static GameObject& GetActiveRoot()
+		{
+			return GetActiveScene().GetRoot();
 		}
 
 		/*static Scene& RemoveScene(std::string filename)

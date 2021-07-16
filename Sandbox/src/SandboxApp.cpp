@@ -27,6 +27,7 @@ Technology is prohibited.
 #include "Engine/Transform/TransformSystem.h"
 
 #include "Engine/ECS/GameObject.h"
+#include "Engine/Scene/SceneManager.h"
 
 class TransformTestLayer : public engine::Layer
 {
@@ -328,33 +329,33 @@ public :
 class EditorSceneLayer : public engine::Layer
 {
 private:
-    engine::World& world;
+    engine::Scene& scene;
 public:
 
     EditorSceneLayer() : Layer{ "EditorSceneLayer" },
-        world(engine::WorldManager::CreateWorld())
+        scene(engine::SceneManager::CreateScene(""))
     {
-        auto& ts = world.RegisterSystem<engine::TransformSystem>();
-        ts->Init();
+        //auto& ts = world.RegisterSystem<engine::TransformSystem>();
+        //ts->Init();
 
-        auto* root = new engine::GameObject();
+        //auto* root = new engine::GameObject();
 
-        for (int i = 0; i < 100; ++i)
-        {
-            auto* ent = new engine::GameObject();
-            root->AddChild(ent);
+        //for (int i = 0; i < 100; ++i)
+        //{
+        //    auto* ent = new engine::GameObject();
+        //    root->AddChild(ent);
 
-            //auto ent = world.CreateEntity();
-            //world.EmplaceComponent<engine::Test_Transform>(ent, engine::Test_Transform{ 1.f,2.f,3.f });
-            //world.EmplaceComponent<engine::Test_Health>(ent, engine::Test_Health{20});
-        }
-
+        //    //auto ent = world.CreateEntity();
+        //    //world.EmplaceComponent<engine::Test_Transform>(ent, engine::Test_Transform{ 1.f,2.f,3.f });
+        //    //world.EmplaceComponent<engine::Test_Health>(ent, engine::Test_Health{20});
+        //}
+        auto gameobj = scene.CreateGameObject();
     }
 
     virtual void OnUpdate(engine::Timestep dt) override
     {
         
-        world.GetSystem<engine::TransformSystem>()->Update();
+        //world.GetSystem<engine::TransformSystem>()->Update();
     }
 
 };

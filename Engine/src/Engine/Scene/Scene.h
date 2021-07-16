@@ -16,23 +16,21 @@ Technology is prohibited.
  *********************************************************************/
 #pragma once
 #include "Engine/ECS/WorldManager.h"
+#include "Engine/ECS/GameObject.h"
 #include <string>
 namespace engine
 {
+	class SceneManager;
 	class Scene
 	{
 		friend class SceneManager;
 	private:
-
-		explicit Scene(std::string filename) : m_filename{ std::move(filename) } {};
-		~Scene() = default;
-
-
-	private:
 		std::string m_filename{};
 		World* m_world = nullptr;
+		GameObject m_root;
 	public:
-
+		explicit Scene(std::string filename) : m_filename{ std::move(filename) } {};
+		~Scene() = default;
 
 		std::string GetSceneName()
 		{
@@ -42,7 +40,7 @@ namespace engine
 		World& Load()
 		{
 			m_world = &WorldManager::CreateWorld();
-
+			m_root.Init();
 			//deserialise scene file and load objects here
 
 
@@ -65,8 +63,20 @@ namespace engine
 
 		World& GetWorld()
 		{
-			ENGINE_ASSERT(m_world != nullptr);
+			ENGINE_ASSERT(IsLoaded());
 			return *m_world;
+		}
+
+		GameObject& GetRoot()
+		{
+			ENGINE_ASSERT(IsLoaded());
+			return m_root;
+		}
+
+		GameObject* CreateGameObject()
+		{
+			ENGINE_ASSERT(IsLoaded());
+			return m_root.AddChild();
 		}
 	};
 }

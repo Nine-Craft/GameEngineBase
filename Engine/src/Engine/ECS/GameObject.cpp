@@ -22,14 +22,18 @@ namespace engine
     {
         //m_entity = ECS_Manager::GenerateUID();
         //m_entity = EntityManager::CreateEntity();
-        m_entity = WorldManager::GetActiveWorld().CreateEntity();
-        auto& trans = AddComponent<Transform3D>();
 
     }
 
     GameObject::~GameObject()
     {
         WorldManager::GetActiveWorld().DestroyEntity(m_entity);
+    }
+
+    void GameObject::Init()
+    {
+        m_entity = WorldManager::GetActiveWorld().CreateEntity();
+        auto& trans = AddComponent<Transform3D>();
     }
 
     void GameObject::AddChild(GameObject* gameObj, bool preserveTransforms)
@@ -42,6 +46,19 @@ namespace engine
 
         children.push_back(gameObj);
     }
+
+    GameObject* GameObject::AddChild(bool preserveTransforms)
+    {
+        // Flag coordinates to be converted when parented
+        if (preserveTransforms)
+        {
+            //gameObj->GetComponent<Transform3D>().ConvertCoordinates();
+        }
+        auto child = children.emplace_back(new GameObject());
+        child->Init();
+        return child;
+    }
+
 
     void GameObject::AddChild(std::initializer_list<GameObject*> gameObjs, bool preserveTransforms)
     {

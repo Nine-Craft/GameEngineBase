@@ -35,12 +35,15 @@ namespace engine
         GameObject();
         ~GameObject();
         
+        void Init();
+
         constexpr Entity GetID() const { return m_entity; }
 
         constexpr bool IsActive() const { return m_active; }
         void SetActive(bool const active) { m_active = active; }
         
         void AddChild(GameObject* gameObj, bool preserveTransforms = false);
+        GameObject* AddChild(bool preserveTransforms = false);
         void AddChild(std::initializer_list<GameObject*> gameObjs, bool preserveTransforms = false);
         void RemoveChild(GameObject* gameObj);
         std::vector<GameObject*> const& GetChildren() const;
