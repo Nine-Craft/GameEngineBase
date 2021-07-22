@@ -20,6 +20,7 @@ namespace engine
 	class WorldManager
 	{
 		using ID_type = World::ID_type;
+		//using CallbackType = std::function<void(Entity)>;
 	private:
 		static WorldManager& GetInstance() 
 		{
@@ -37,14 +38,13 @@ namespace engine
 
 		std::unordered_map<ID_type,World> worlds;
 		ID_type m_active_world = -1;
-
 	public:
 
 		static World& CreateWorld()
 		{
 			auto id = GenerateWorldID();
 			auto& newWorld = GetInstance().worlds.emplace(id, World{}).first->second;
-
+			newWorld.SetID(id);
 			if (GetInstance().worlds.size() == 1)
 				GetInstance().m_active_world = newWorld.GetID();
 			return newWorld;
@@ -79,7 +79,6 @@ namespace engine
 				GetInstance().m_active_world = (*GetInstance().worlds.begin()).first;
 
 		}
-
 
 	};
 }
