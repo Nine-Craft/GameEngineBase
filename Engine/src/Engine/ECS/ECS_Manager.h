@@ -171,6 +171,19 @@ namespace engine
 			return ComponentView<Args...>(*m_ComponentManager, *m_EntityManager);
 		}
 
+		template<typename T>
+		typename ComponentArray<T>::container_type& GetComponentContainer()
+		{
+			return m_ComponentManager->GetContainer<T>();
+		}
+
+		template<typename T>
+		typename ComponentArray<T>::container_type::dense_container& GetComponentDenseArray()
+		{
+			return m_ComponentManager->GetContainerDenseArray<T>();
+		}
+
+
 		//// Event methods
 		//void AddEventListener(EventId eventId, std::function<void(Event&)> const& listener)
 		//{

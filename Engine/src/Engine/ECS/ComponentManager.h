@@ -23,7 +23,6 @@ namespace engine
 	public:
 		using TypeContainer = std::unordered_map<const char*, ComponentType>;
 		using ComponentContainer = std::unordered_map<const char*, std::shared_ptr<ComponentArrayBase>>;
-
 		/*****************************************************************//**
 		 * @brief Registers a component to be used. Creates a ComponentArray
 		 * of type T and inserts it into m_ComponentArrays
@@ -76,8 +75,8 @@ namespace engine
 		{
 			if (IsRegistered<T>() == false)
 				RegisterComponent<T>();
-			auto comp = GetComponentArray<T>()->InsertData(entity, component);
-			return *comp;
+			auto& comp = GetComponentArray<T>()->InsertData(entity, component);
+			return comp;
 		}
 
 		template<typename T, typename... args>
@@ -154,6 +153,18 @@ namespace engine
 		Entity GetEntity(T* component)
 		{
 			return static_cast<Component>(component).GetEntity();
+		}
+
+		template<typename T>
+		typename ComponentArray<T>::container_type& GetContainer()
+		{
+			return GetComponentArray<T>()->GetContainer();
+		}
+
+		template<typename T>
+		typename ComponentArray<T>::container_type::dense_container& GetContainerDenseArray()
+		{
+			return GetContainer<T>().GetDenseContainer();
 		}
 	private:
 		TypeContainer m_ComponentTypes{};
