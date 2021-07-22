@@ -201,6 +201,27 @@ namespace engine
 			auto test_transform_system = _ECS_Manager.RegisterSystem<Test_Transform_System>();
 			test_transform_system->Run();
 		}
+
+
+		{
+			auto& container = _ECS_Manager.GetComponentContainer<Test_Transform>();
+			auto& containerDense = _ECS_Manager.GetComponentDenseArray<Test_Transform>();
+			auto view2 = _ECS_Manager.GetComponentView<Test_Transform>();
+			int i = 0;
+			Entity prev;
+			for (auto it : view2)
+			{
+				auto entityindex = container.GetIndex(it);
+				i++;
+				if (i > 2)
+				{
+					prev = it;
+					container.Swap(it, prev);
+
+				}
+			}
+			LOG_TRACE("test container retrieval SUCCESS: {0}", i);
+		}
 	}
 
 	void ECS_Scene_Test()
