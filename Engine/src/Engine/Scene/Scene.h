@@ -27,11 +27,16 @@ namespace engine
 	private:
 		std::string m_filename{};
 		World* m_world = nullptr;
-		GameObject m_root;
+		//GameObject m_root{};
+		GameObject* m_root = nullptr;
+		//SparseContainer<GameObject,MAX_ENTITY> gameobjects{};
 	public:
-		explicit Scene(std::string filename) : m_filename{ std::move(filename) } {};
-		~Scene() = default;
+		explicit Scene(std::string filename) : m_filename{ std::move(filename) } 
+		{ 
 
+		};
+		~Scene() { if (IsLoaded()) Unload(); }
+		
 		std::string GetSceneName()
 		{
 			return m_filename.substr(0, m_filename.find_first_of('.'));
@@ -40,7 +45,7 @@ namespace engine
 		World& Load()
 		{
 			m_world = &WorldManager::CreateWorld();
-			m_root.Init();
+			//m_root = new GameObject{ m_world->CreateEntity() };
 			//deserialise scene file and load objects here
 
 
@@ -70,13 +75,13 @@ namespace engine
 		GameObject& GetRoot()
 		{
 			ENGINE_ASSERT(IsLoaded());
-			return m_root;
+			return *m_root;
 		}
 
 		GameObject* CreateGameObject()
 		{
 			ENGINE_ASSERT(IsLoaded());
-			return m_root.AddChild();
+			return m_root->AddChild();
 		}
 	};
 }
