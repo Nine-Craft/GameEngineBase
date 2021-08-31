@@ -41,7 +41,7 @@ public:
         auto ss = m_scene.GetWorld().GetSystem<engine::ScriptSystem>();
         ss->InvokeFunctionAll("Update", 1, (float)dt.GetSeconds());
 
-        if (engine::Input::IsKeyPressed(engine::KeyCode::P))
+        if (engine::Input::IsKeyPressed(engine::KeyCode::DEL))
         {
             if (!isPlaying)
             {
@@ -55,7 +55,7 @@ public:
             }
         }
 
-        if (engine::Input::IsKeyPressed(engine::KeyCode::O))
+        if (engine::Input::IsKeyPressed(engine::KeyCode::END))
         {
             if (isPlaying)
                 ss->DebugPrint();
